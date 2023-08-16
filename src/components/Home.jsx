@@ -1,78 +1,75 @@
-import React, { useRef, useState } from 'react';
-import { EditorState } from 'draft-js';
-import { Editor } from 'react-draft-wysiwyg';
-import 'react-draft-wysiwyg/dist/react-draft-wysiwyg.css';
-import { useSelector } from 'react-redux';
-
-const Home = () => {
-  const [editorState, setEditorState] = useState(EditorState.createEmpty());
-  const toSendInput=useRef();
-  const emailSubject=useRef();
-  const senderEmail=useSelector((state)=>state.login.email).split(/[@.]/).join('')
-  console.log(senderEmail);
-
-  const handleEditorChange = (newEditorState) => {
-    setEditorState(newEditorState);
-  };
-
-  const handleSendEmail = async(e) => {
-    e.preventDefault();
-    const plainTextContent = editorState.getCurrentContent().getPlainText();
-    const subject=emailSubject.current.value;
-    const receiverEmail=toSendInput.current.value;
-    
-    if (!receiverEmail || !subject) {
-      alert('Please fill out all required fields.');
-      return;
-    }
-
-    const dataToSend={
-      receiverEmail:receiverEmail,
-      subject: subject,
-      emailData:plainTextContent,
-      senderEmail:senderEmail,
-    }
-    try {
-        const res=await fetch(`https://email-project-bf24b-default-rtdb.asia-southeast1.firebasedatabase.app/${senderEmail}.json`,{
-          method:'POST',
-          body:JSON.stringify(dataToSend),
-          headers:{
-            "Content-Type":"application/json",
-          }
-        })
-        if(!res.ok) throw new Error('cannot send')
-        const data=await res.json();
-      console.log(data)
-      emailSubject.current.value='';
-      toSendInput.current.value='';
-    } catch (e) {
-      
-    }
-    console.log(plainTextContent);
-  };
-
-  return (
-    <div className="container py-2">
-      <form action="">
-        <div className="col-md-12">
-          <div className="mb-3">
-            <label htmlFor="toField" className="form-label">To</label>
-            <input type="text" id="toField" className="form-control" style={{ width: '100%' }} required ref={toSendInput} />
+ import React, { useState } from 'react'
+import { useNavigate } from 'react-router-dom';
+ 
+ const Home = () => {
+  const [dataToDisplay,setDataToDisplay] =useState('');
+  const navigate=useNavigate();
+  const composeNavigate =()=>{
+    navigate('/compose')
+  }
+   return (
+  <div class="row px-1 " style={{height:'100vh'}}>
+    <div class="col-3 " style={{borderRadius:'0' ,border:'1px solid black'}} >
+      <div className='col px-3'>
+        <div className="row d-flex justify-content-center align-items-center">
+          <button className='btn btn-primary my-2'onClick={ composeNavigate} style={{borderRadius:'0'}}>Compose</button>
           </div>
-        </div>
-        <div className="col-md-12">
-          <div className="mb-3">
-            <label htmlFor="subjectField" className="form-label">Subject</label>
-            <input type="text" id="subjectField" className="form-control" style={{ width: '100%' }} ref={emailSubject} required/>
+          <div className='row'>
+          <button className='btn   my-2'onClick={ composeNavigate} style={{borderRadius:'0',border:'1px solid black'}}>Inbox</button>
+          <button className='btn  my-2'onClick={ composeNavigate} style={{borderRadius:'0',border:'1px solid black'}}>Unread</button>
+          <button className='btn  my-2'onClick={ composeNavigate} style={{borderRadius:'0',border:'1px solid black'}}>Starred</button>
+          <button className='btn   my-2'onClick={ composeNavigate} style={{borderRadius:'0',border:'1px solid black'}}>Sent</button>
+          <button className='btn   'onClick={ composeNavigate} style={{borderRadius:'0',border:'1px solid black'}}>Archive</button>
+
           </div>
-        </div>
-      <div className="mb-3">
-        <Editor editorStyle={{ border: "1px solid black" }} editorState={editorState} onEditorStateChange={handleEditorChange} />
       </div>
-      <button className="btn btn-primary" onClick={handleSendEmail}>Send Email</button>
-      </form>
     </div>
-  );
-}
+    <div className="col-9" >
+        <div className="row py-2 my-1" style={{border:'1px solid black'}}>
+          <div className="col-3">Name</div>
+          <div className="col-9">Desc</div>
+        </div>
+        <div className="row py-2 my-1" style={{border:'1px solid black'}}>
+          <div className="col-3">Name</div>
+          <div className="col-9">Desc</div>
+        </div>
+        <div className="row py-2 my-1" style={{border:'1px solid black'}}>
+          <div className="col-3">Name</div>
+          <div className="col-9">Desc</div>
+        </div>
+        <div className="row py-2 my-1" style={{border:'1px solid black'}}>
+          <div className="col-3">Name</div>
+          <div className="col-9">Desc</div>
+        </div>
+        <div className="row py-2 my-1" style={{border:'1px solid black'}}>
+          <div className="col-3">Name</div>
+          <div className="col-9">Desc</div>
+        </div>
+        <div className="row py-2 my-1" style={{border:'1px solid black'}}>
+          <div className="col-3">Name</div>
+          <div className="col-9">Desc</div>
+        </div>
+        <div className="row py-2 my-1" style={{border:'1px solid black'}}>
+          <div className="col-3">Name</div>
+          <div className="col-9">Desc</div>
+        </div>
+        <div className="row py-2 my-1" style={{border:'1px solid black'}}>
+          <div className="col-3">Name</div>
+          <div className="col-9">Desc</div>
+        </div>
+        <div className="row py-2 my-1" style={{border:'1px solid black'}}>
+          <div className="col-3">Name</div>
+          <div className="col-9">Desc</div>
+        </div>
+        <div className="row py-2 my-1" style={{border:'1px solid black'}}>
+          <div className="col-3">Name</div>
+          <div className="col-9">Desc</div>
+        </div>
+    </div>
+  </div>
+ 
 
-export default Home;
+   )
+ }
+ 
+ export default Home
