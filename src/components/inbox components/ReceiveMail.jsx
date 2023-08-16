@@ -2,7 +2,8 @@ import React, { useEffect, useState } from 'react'
 import { useSelector } from 'react-redux';
 
 const ReceiveMail = () => {
-    const [receiveMail, setReceiveMail] = useState([]);    const userEmail=useSelector((state)=>state.login.email);
+    const [receiveMail, setReceiveMail] = useState([]);    
+    const userEmail=useSelector((state)=>state.login.email);
     useEffect(() => {
         const fetchEMail = async() =>{
             try {
@@ -44,8 +45,6 @@ const ReceiveMail = () => {
         </div>
         <div className="row px-2 py-3">
                 <p>{item.emailData}</p>
-                
-             
         </div>
     </div>
     )  }

@@ -8,8 +8,8 @@ const ComposePage = () => {
   const [editorState, setEditorState] = useState(EditorState.createEmpty());
   const toSendInput=useRef();
   const emailSubject=useRef();
-  const senderEmail=useSelector((state)=>state.login.email).split(/[@.]/).join('')
-
+  const senderEmail=useSelector((state)=>state.login.email)
+  
   const handleEditorChange = (newEditorState) => {
     setEditorState(newEditorState);
   };
@@ -19,7 +19,8 @@ const ComposePage = () => {
     const plainTextContent = editorState.getCurrentContent().getPlainText();
     const subject=emailSubject.current.value;
     const receiverEmail=toSendInput.current.value;
-    
+    const date=new Date();
+    console.log(date)
     if (!receiverEmail || !subject) {
       alert('Please fill out all required fields.');
       return;
@@ -30,9 +31,11 @@ const ComposePage = () => {
       subject: subject,
       emailData:plainTextContent,
       senderEmail:senderEmail,
+      date:new Date().toLocaleString(),
+      read:false,
     }
     try {
-        const res=await fetch(`https://email-project-bf24b-default-rtdb.asia-southeast1.firebasedatabase.app/email/${senderEmail}.json`,{
+        const res=await fetch(`https://email-project-bf24b-default-rtdb.asia-southeast1.firebasedatabase.app/email/${senderEmail.split(/[@.]/).join('')}.json`,{
           method:'POST',
           body:JSON.stringify([dataToSend]),
           headers:{
