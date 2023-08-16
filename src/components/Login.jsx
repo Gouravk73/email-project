@@ -1,10 +1,13 @@
 import React, { useRef } from 'react'
+import { useDispatch } from 'react-redux';
 import { Link, useNavigate } from 'react-router-dom';
+import { LoginSliceActions } from '../store/login-slice';
 
 const Login = () => {
     const emailInput=useRef();
     const PasswordInput=useRef();
-    const navigate =useNavigate()
+    const navigate =useNavigate();
+    const dispatch=useDispatch();
 
     const submitHandler =async (e) => {
         e.preventDefault();
@@ -26,8 +29,11 @@ const Login = () => {
 
             }
             const data=await res.json()
-            localStorage.setItem("email",  data.email)
-            localStorage.setItem("token",  data.idToken)
+            
+            dispatch(LoginSliceActions.loginSuccess({
+                email:data.email,
+                idToken:data.idToken,
+            }))
             console.log(data)
             navigate('/')
 

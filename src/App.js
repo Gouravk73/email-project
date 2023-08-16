@@ -3,7 +3,10 @@ import { BrowserRouter,Routes,Route } from 'react-router-dom';
 import Home from './components/Home';
 import SignIn from './components/SignIn';
 import Login from './components/Login';
+import { useSelector } from 'react-redux';
 function App() {
+  const email=useSelector((state)=>state.login.email);
+  console.log(email);
   return (
     <BrowserRouter>
     <Routes>

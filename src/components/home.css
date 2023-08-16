@@ -1,0 +1,15 @@
+.quill-editor {
+    position: relative;
+  }
+  
+  /* Position the toolbar absolute at the bottom */
+  .ql-toolbar {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+  }
+ 
+  
+  
+  
