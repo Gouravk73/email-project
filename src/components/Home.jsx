@@ -1,52 +1,75 @@
- import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import FetchInbox from './inbox components/FetchInbox';
-import {BsDot} from 'react-icons/bs'
+import FetchSent from './inbox components/FetchSent';
+import { BsDot } from 'react-icons/bs';
 import FetchReadData from './inbox components/FetchReadData';
 import Deletedata from './inbox components/Deletedata';
-import FetchSent from './inbox components/FetchSent';
- 
- const Home = () => {
-  const [dataToDisplay,setDataToDisplay] =useState('');
-    const userEmail=useSelector((state)=>state.login.email);
-    const [content,setContent] = useState([]);
-    const [InboxContent,setInboxContent] = useState([]);
-    const [selectedEmail, setSelectedEmail] = useState(null);
-    
-  const navigate=useNavigate();
-  const composeNavigate =()=>{
-    navigate('/compose')
-  }
-  const buttonContentHandler =async(data)=>{
-    setContent(data)
-    if(data==='inbox'||data==='Unread'){
-      const res =await FetchInbox(userEmail)
-      console.log(res)
-      setInboxContent(res)}
-    else if(data==='Sent'){
-      const res =await FetchSent(userEmail)
-      console.log(res)
-      setInboxContent(res)
+
+const POLL_INTERVAL = 2000; // Poll every 2 seconds
+
+const Home = () => {
+  const userEmail = useSelector((state) => state.login.email);
+  const [content, setContent] = useState([]);
+  const [InboxContent, setInboxContent] = useState([]);
+  const [selectedEmail, setSelectedEmail] = useState(null);
+
+  const navigate = useNavigate();
+
+  const composeNavigate = () => {
+    navigate('/compose');
+  };
+
+  const buttonContentHandler = async (data) => {
+    setContent(data);
+    if (data === 'inbox' || data === 'Unread') {
+      const res = await FetchInbox(userEmail);
+      setInboxContent(res);
+    } else if (data === 'Sent') {
+      const res = await FetchSent(userEmail);
+      setInboxContent(res);
     }
 
-  
-    setSelectedEmail(null)
+    setSelectedEmail(null);
+  };
 
-  }
-  const emailDetails=(data)=>{
-    data.read=true
-    FetchReadData(data)
-    setSelectedEmail(data)
-  }
-  const deleteHandler=async(item)=>{
-    console.log(item)
-    Deletedata(item)
-    setInboxContent(prevInboxContent => prevInboxContent.filter(email => email !== item));
+  const emailDetails = (data) => {
+    data.read = true;
+    FetchReadData(data);
+    setSelectedEmail(data);
+  };
 
-    setSelectedEmail(null)
-  }
-  console.log('inbox selected',InboxContent)
+  const deleteHandler = async (item) => {
+    Deletedata(item);
+    setInboxContent((prevInboxContent) =>
+      prevInboxContent.filter((email) => email !== item)
+    );
+    setSelectedEmail(null);
+  };
+
+  useEffect(() => {
+    const fetchInboxData = async () => {
+      let res = [];
+
+      if (content === 'inbox' || content === 'Unread') {
+        res = await FetchInbox(userEmail);
+      } else if (content === 'Sent') {
+        res = await FetchSent(userEmail);
+      }
+
+      setInboxContent(res);
+    };
+
+    fetchInboxData(); // Fetch initial data
+
+    const interval = setInterval(fetchInboxData, POLL_INTERVAL);
+
+    return () => {
+      clearInterval(interval); // Clear interval on component unmount
+    };
+  }, [content, userEmail]);
+
    return (
   <div className="row px-1 " style={{height:'100vh'}}>
     <div className="col-3 " style={{borderRadius:'0' ,border:'1px solid black'}} >
