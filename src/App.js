@@ -9,16 +9,17 @@ import ComposePage from "./components/ComposePage";
 import ReceiveMail from './components/inbox components/ReceiveMail';
 function App() {
   const email=useSelector((state)=>state.login.email);
-  console.log(email);
+  const isLoggedIn=useSelector((state)=>state.login.isLoggedIn);
+  console.log(email,isLoggedIn);
   return (
     <BrowserRouter>
     <Header/>
     <Routes>
-      <Route path='/' element={<Home/>}/>
+      <Route path='/' element={isLoggedIn?<Home/>:<Login/>}/>
       <Route path='/signin' element={<SignIn/>}/>
       <Route path='/login' element={<Login/>}/>
-      <Route path='/compose' element={<ComposePage/>}/>
-      <Route path='/receivemail' element={<ReceiveMail/>}/>
+      <Route path='/compose' element={isLoggedIn?<ComposePage/>:<Login/> }/>
+      <Route path='/receivemail' element={isLoggedIn?<ReceiveMail/>:<Login/> }/>
     </Routes>
     </BrowserRouter>
   );

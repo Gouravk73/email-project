@@ -7,12 +7,10 @@ const FetchInbox= async(userEmail) =>{
         const data=await res.json();
         for(const key in data){
             const EmailData=data[key];
-            console.log(EmailData);
-            for(const key1 in EmailData){
+             for(const key1 in EmailData){
                 const EmailDataKey=EmailData[key1];
                      for(const key2 in EmailDataKey){
-                        console.log(EmailDataKey[key2].receiverEmail,userEmail)
-                        if(userEmail===EmailDataKey[key2].receiverEmail){
+                         if(userEmail===EmailDataKey[key2].receiverEmail){
                             receivedEmails.push(EmailDataKey[key2])
                         }
                      }

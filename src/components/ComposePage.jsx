@@ -64,6 +64,7 @@ const ComposePage = () => {
         <span className="input-group-text"  >Subject</span>
         <input type="text" className="form-control" placeholder='Subject'required ref={emailSubject} />
       </div>
+      <button className="btn btn-primary" onClick={handleSendEmail}>Send Email</button>
        
          
       <div className="mb-3 md-3">

@@ -3,6 +3,7 @@ import { createSlice } from '@reduxjs/toolkit'
 const initialState ={
       email:localStorage.getItem('email')||'',
       idToken:localStorage.getItem('idToken')||'',
+      isLoggedIn:!!localStorage.getItem('token'),
 }
 
 const LoginSlice= createSlice({
