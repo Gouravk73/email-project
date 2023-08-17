@@ -1,27 +1,28 @@
 
 const FetchInbox= async(userEmail) =>{
+    const receivedEmails = [];                
+
     try {
         const res=await fetch(`https://email-project-bf24b-default-rtdb.asia-southeast1.firebasedatabase.app/email.json`)
         const data=await res.json();
-        console.log(data)
-
-        const receivedEmails = [];                
         for(const key in data){
             const EmailData=data[key];
-            console.log(EmailData)
+            console.log(EmailData);
+            for(const key1 in EmailData){
+                const EmailDataKey=EmailData[key1];
+                     for(const key2 in EmailDataKey){
+                        console.log(EmailDataKey[key2].receiverEmail,userEmail)
+                        if(userEmail===EmailDataKey[key2].receiverEmail){
+                            receivedEmails.push(EmailDataKey[key2])
+                        }
+                     }
+                }
+            }
+        
+      return receivedEmails;
 
-             for(const key in EmailData){
-                EmailData[key].forEach(element => {
-                    if(userEmail===element.receiverEmail){
-                        receivedEmails.push(element);
-                        console.log('ele',element)
-
-                    }
-                });
-             }
-        }
-        return receivedEmails;
       }
       catch (e) {}
+
 }
 export default FetchInbox;

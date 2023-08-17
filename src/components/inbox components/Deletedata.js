@@ -1,4 +1,4 @@
-const FetchReadData = async (dataToUpdate) => {
+const Deletedata = async (dataToDelete) => {
     try {
       const res = await fetch(`https://email-project-bf24b-default-rtdb.asia-southeast1.firebasedatabase.app/email.json`);
       const data = await res.json();
@@ -9,16 +9,14 @@ const FetchReadData = async (dataToUpdate) => {
         for (const emailKey in EmailData) {
             const emailObject = EmailData[emailKey];
             for(const key1 in emailObject) {
-              if(emailObject[key1].date===dataToUpdate.date) { 
+              if(emailObject[key1].date===dataToDelete.date) {
+                    console.log("delete",)
                 try {
-                   fetch(`https://email-project-bf24b-default-rtdb.asia-southeast1.firebasedatabase.app/email/${key}/${emailKey}.json`, {
-                    method: "PUT",
-                    body: JSON.stringify([dataToUpdate]),
-                    headers: {
-                      "content-type": "application/json"
-                    }
-                   
+                   const res= await fetch(`https://email-project-bf24b-default-rtdb.asia-southeast1.firebasedatabase.app/email/${key}/${emailKey}.json`, {
+                    method: "DELETE",
                   });
+                  const dataRes=await res.json();
+                  console.log(dataRes)
                 } catch (e) {
                   console.error('error');
                 }
@@ -34,5 +32,5 @@ const FetchReadData = async (dataToUpdate) => {
     }
   };
   
-  export default FetchReadData;
+  export default Deletedata;
   

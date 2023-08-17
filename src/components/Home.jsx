@@ -4,10 +4,12 @@ import { useNavigate } from 'react-router-dom';
 import FetchInbox from './inbox components/FetchInbox';
 import {BsDot} from 'react-icons/bs'
 import FetchReadData from './inbox components/FetchReadData';
+import Deletedata from './inbox components/Deletedata';
+ 
  const Home = () => {
   const [dataToDisplay,setDataToDisplay] =useState('');
     const userEmail=useSelector((state)=>state.login.email);
-    const [content,setContent] = useState('');
+    const [content,setContent] = useState([]);
     const [InboxContent,setInboxContent] = useState([]);
     const [selectedEmail, setSelectedEmail] = useState(null);
     
@@ -28,6 +30,13 @@ import FetchReadData from './inbox components/FetchReadData';
     FetchReadData(data)
     setSelectedEmail(data)
   }
+  const deleteHandler=async(item)=>{
+    console.log(item)
+    Deletedata(item)
+    setInboxContent(prevInboxContent => prevInboxContent.filter(email => email !== item));
+
+    setSelectedEmail(null)
+  }
    return (
   <div className="row px-1 " style={{height:'100vh'}}>
     <div className="col-3 " style={{borderRadius:'0' ,border:'1px solid black'}} >
@@ -46,11 +55,27 @@ import FetchReadData from './inbox components/FetchReadData';
       </div>
     </div>
     <div className="col-9 py-4 px-4" >
-      {content==='inbox'&&selectedEmail===null? (
+      {content==='Unread'&&selectedEmail===null? (
           InboxContent.map((item, index) => (
-            <div key={index} className="row py-2 my-2" onClick={()=>emailDetails(item)} style={{ border: '1px solid black' }}>
-              <div className="col-6 d-flex"> {!item.read&&<BsDot size={'2rem'}/> }{item.senderEmail}</div>
-              <div className="col-6">{item.emailData.substring(0, 20)}</div>
+            !item.read&&(<div key={index} className="row py-2 my-2" onClick={()=>emailDetails(item)} style={{ border: '1px solid black' }}>
+                 <div className="col-6 d-flex"> {!item.read&&<BsDot size={'2rem'}/> }{item.senderEmail}</div>
+              <div className="col-6">{item.emailData.substring(0, 20)}
+              </div> 
+            </div>)
+          ))
+        ):(
+          <>not</>
+        )}
+        {content==='inbox'&&selectedEmail===null? (
+          InboxContent.map((item, index) => (
+            <div key={index} className="row py-2 my-2" style={{ border: '1px solid black' }}>
+              <div className="col-6 d-flex"  onClick={()=>emailDetails(item)}> {!item.read&&<BsDot size={'2rem'}/> }{item.senderEmail}</div>
+              <div className="col-6"  onClick={()=>emailDetails(item)}>{item.emailData.substring(0, 20)}
+              
+              </div>
+              <div>
+              <button onClick={()=>deleteHandler(item)}>deltee</button>
+              </div>
             </div>
           ))
         ):(
