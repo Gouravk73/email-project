@@ -7,7 +7,7 @@ import { BsDot } from 'react-icons/bs';
 import FetchReadData from './inbox components/FetchReadData';
 import Deletedata from './inbox components/Deletedata';
 
-const POLL_INTERVAL = 2000; // Poll every 2 seconds
+ 
 
 const Home = () => {
   const userEmail = useSelector((state) => state.login.email);
@@ -57,16 +57,15 @@ const Home = () => {
       } else if (content === 'Sent') {
         res = await FetchSent(userEmail);
       }
-
       setInboxContent(res);
     };
 
-    fetchInboxData(); // Fetch initial data
+    fetchInboxData();
 
-    const interval = setInterval(fetchInboxData, POLL_INTERVAL);
+    const interval = setInterval(fetchInboxData, 2000);
 
     return () => {
-      clearInterval(interval); // Clear interval on component unmount
+      clearInterval(interval); 
     };
   }, [content, userEmail]);
 
